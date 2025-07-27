@@ -1,0 +1,83 @@
+
+-- query 1: Computes a join of at least three tables.
+
+SELECT destiny_damage.weapons.weapon_type, destiny_damage.damage.fire_rate, destiny_damage.slotability.in_kinetic, destiny_damage.slotability.in_energy, destiny_damage.slotability.in_power
+FROM destiny_damage.weapons
+JOIN destiny_damage.damage ON destiny_damage.weapons.weapon_id = destiny_damage.damage.weapon_id
+JOIN destiny_damage.slotability ON destiny_damage.weapons.weapon_id = destiny_damage.slotability.weapon_id;
+
+-- query 2: Uses nested queries with the IN operator and GROUP BY.
+SELECT destiny_damage.weapons.weapon_type, AVG(destiny_damage.damage.body_damage) AS avg_body_damage
+FROM destiny_damage.weapons
+JOIN destiny_damage.damage ON destiny_damage.weapons.weapon_id = destiny_damage.damage.weapon_id
+WHERE destiny_damage.weapons.weapon_id IN (
+    SELECT weapon_id
+    FROM destiny_damage.slotability
+    WHERE in_kinetic = true
+)
+GROUP BY destiny_damage.weapons.weapon_type;
+
+
+-- query 3:  A correlated nested query with proper aliasing.
+
+SELECT destiny_damage.weapons.weapon_type, (
+    SELECT AVG(destiny_damage.damage.precision_damage)
+    FROM destiny_damage.damage
+    WHERE destiny_damage.damage.weapon_id = destiny_damage.weapons.weapon_id
+) AS avg_precision_damage
+FROM destiny_damage.weapons;
+
+-- query 4: Uses a FULL OUTER JOIN.
+SELECT destiny_damage.weapons.weapon_type, destiny_damage.slotability.in_kinetic, destiny_damage.slotability.in_energy, destiny_damage.slotability.in_power
+FROM destiny_damage.weapons
+LEFT JOIN destiny_damage.slotability ON destiny_damage.weapons.weapon_id = destiny_damage.slotability.weapon_id;
+
+
+-- query 5:   Uses nested queries with UNION.
+SELECT weapon_type
+FROM destiny_damage.weapons
+WHERE weapon_id IN (
+    SELECT weapon_id
+    FROM destiny_damage.damage
+    WHERE body_damage > 100
+)
+UNION
+SELECT weapon_type
+FROM destiny_damage.weapons
+WHERE weapon_id IN (
+    SELECT weapon_id
+    FROM destiny_damage.damage
+    WHERE precision_damage > 150
+);
+
+-- query 6:  Custom query using at least two tables.
+SELECT destiny_damage.weapons.weapon_type, destiny_damage.damage.fire_rate, destiny_damage.damage.reload_speed
+FROM destiny_damage.weapons
+JOIN destiny_damage.damage ON destiny_damage.weapons.weapon_id = destiny_damage.damage.weapon_id
+WHERE destiny_damage.damage.fire_rate > 300 AND destiny_damage.damage.reload_speed < 60;
+
+-- query 7: Custom query using at least two tables.
+
+SELECT destiny_damage.weapons.weapon_type, COUNT(destiny_damage.slotability.weapon_id) AS slot_count
+FROM destiny_damage.weapons
+LEFT JOIN destiny_damage.slotability ON destiny_damage.weapons.weapon_id = destiny_damage.slotability.weapon_id
+GROUP BY destiny_damage.weapons.weapon_type;
+
+-- query 8: Custom query using at least two tables.
+
+SELECT destiny_damage.damage.body_damage, destiny_damage.damage.precision_damage, AVG(destiny_damage.damage.body_damage) OVER (PARTITION BY destiny_damage.weapons.weapon_type) AS avg_body_damage
+FROM destiny_damage.damage
+JOIN destiny_damage.weapons ON destiny_damage.damage.weapon_id = destiny_damage.weapons.weapon_id;
+
+-- query 9: Custom query using at least three tables.
+SELECT destiny_damage.weapons.weapon_type, destiny_damage.slotability.in_kinetic, destiny_damage.slotability.in_energy, destiny_damage.slotability.in_power, destiny_damage.damage.body_damage, destiny_damage.damage.precision_damage
+FROM destiny_damage.weapons
+JOIN destiny_damage.slotability ON destiny_damage.weapons.weapon_id = destiny_damage.slotability.weapon_id
+JOIN destiny_damage.damage ON destiny_damage.weapons.weapon_id = destiny_damage.damage.weapon_id;
+
+-- query 10: Custom query with aliasing.
+SELECT destiny_damage.weapons.weapon_type AS weapon, destiny_damage.damage.body_damage, destiny_damage.damage.precision_damage
+FROM destiny_damage.weapons
+JOIN destiny_damage.damage ON destiny_damage.weapons.weapon_id = destiny_damage.damage.weapon_id
+ORDER BY destiny_damage.damage.body_damage DESC, destiny_damage.damage.precision_damage DESC;
+
