@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<AnchorPane styleClass="background-dark" xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainWindowController">
+    <BorderPane fx:id="myRootBorder"
+                AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0"
+                AnchorPane.topAnchor="0.0">
+        <top>
+        </top>
+        <left>
+            <fx:include source="SideMenu.fxml" fx:id="mySideMenu"/>
+        </left>
+        <center>
+        </center>
+    </BorderPane>
+</AnchorPane>

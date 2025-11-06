@@ -1,0 +1,175 @@
+.background-dark {
+    -fx-background-color: #1e1f22;
+}
+
+.foreground-dark{
+    -fx-background-color: #2b2d30;
+    -fx-border-color: transparent;
+}
+
+.dark-menu{
+    -fx-text-fill: #dee0d8;
+    -fx-background-color: #2b2d30;
+    -fx-font-size: 12;
+    -fx-border-color: #232323;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+}
+
+.dark-menu .label{
+    -fx-text-fill: #dee0d8;
+}
+
+.side-menu{
+    -fx-text-fill: #dee0d8;
+    -fx-background-color: #2b2d30;
+    -fx-font-size: 12;
+    -fx-border-color: #232323;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+}
+
+.side-menu .buttons{
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-border-insets: 10;
+    -fx-text-fill: #dee0d8;
+    -fx-font-size: 16;
+    -fx-max-width: Infinity;
+    -fx-alignment: "CENTER_LEFT"
+}
+
+.side-menu .buttons:hover{
+    -fx-background-color: #1e1f22;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-border-insets: 10;
+    -fx-text-fill: #dee0d8;
+    -fx-font-size: 16;
+}
+
+.script-name {
+    -fx-background-color: #2b2d30;
+    -fx-border-color: #232323;
+    -fx-text-fill: #e6e6e6;
+}
+
+.text-area {
+    -fx-background-insets: 0;
+    -fx-border-color: #232323;
+}
+
+.script-area {
+    -fx-background-insets: 0;
+    -fx-border-color: #232323;
+    -fx-font-family: "Monospaced";
+    -fx-font-size: 15px;
+}
+
+.text-area .content {
+    -fx-background-color: #2b2d30;
+    -fx-border-color: #232323;
+}
+
+.text-area, .text-area .content, .text-area:focused {
+    -fx-text-fill: #e6e6e6;
+    -fx-highlight-fill: #264f78;
+    -fx-highlight-text-fill: white;
+    -fx-border-color: #232323;
+}
+
+.weapons-form {
+    -fx-background-color: #2b2d30;
+}
+
+.weapons-form .label{
+    -fx-start-margin: 10;
+    -fx-text-fill: #e6e6e6;
+}
+
+.weapons-form .field{
+    -fx-text-fill: #e6e6e6;
+    -fx-background-color: #232323;
+    -fx-end-margin: 10;
+
+}
+
+.weapons-table{
+    -fx-background-color: #232323;
+    -fx-text-fill: #e6e6e6;
+}
+
+/*Theres apparently no way to edit the table headers so...*/
+.weapons-table .column-header{
+    -fx-background-color: #232323;
+    -fx-text-fill: #e6e6e6;
+}
+
+.scriptEditorMenu {
+    -fx-background-color: #232323;
+}
+
+.scriptEditorMenuButtons{
+    -fx-background-color: #2b2d30;
+    -fx-text-fill: #e6e6e6;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+.dark-chart {
+    -fx-background-color: transparent;
+}
+
+.dark-chart .chart-plot-background {
+    -fx-background-color: #121416;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+}
+
+.dark-chart .chart-vertical-grid-lines,
+.dark-chart .chart-horizontal-grid-lines {
+    -fx-stroke: #2a2f36;
+}
+
+.dark-chart .axis {
+    -fx-tick-label-fill: #c9d1d9;
+    -fx-text-fill: #c9d1d9;
+}
+
+.dark-chart .axis .axis-tick-mark,
+.dark-chart .axis .axis-minor-tick-mark {
+    -fx-stroke: #3a4048;
+}
+
+.dark-chart .chart-legend {
+    -fx-background-color: transparent;
+}
+
+.dark-chart .chart-legend-item {
+    -fx-text-fill: #c9d1d9;
+}
+
+.dark-chart .chart-series-line {
+    -fx-stroke-width: 2.0px;
+}
+
+.dark-chart .default-color0.chart-series-line {
+    -fx-stroke: #64b5f6;
+}
+
+.dark-chart .default-color1.chart-series-line {
+    -fx-stroke: #81c784;
+}
+
+.dark-chart .default-color2.chart-series-line {
+    -fx-stroke: #ffb74d;
+}
+
+.dark-chart .chart-line-symbol {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+

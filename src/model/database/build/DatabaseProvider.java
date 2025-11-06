@@ -1,0 +1,131 @@
+package model.database.build;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Class that constructs the database, if it does not exist yet.
+ * @author Roman Bureacov
+ * @version August 2025
+ */
+public final class DatabaseProvider {
+    private static final Logger LOGGER = Logger.getLogger("model.database.build.DatabaseProvider");
+
+    private static final String WORKING_PATH = "src/model/database/build/";
+    private static final String DB_NAME = "datadamage.db";
+    private static final File INIT_SCRIPT = new File(getPath("CreateDatabase.sql").toString());
+    private static final File DB_FILE = new File(getPath(DB_NAME).toString());
+    private static final String DB_URL = "jdbc:sqlite:" + DB_FILE.getPath();
+    private static final Connection CONNECTION;
+
+    static {
+        if (!DB_FILE.exists()) {
+            try {
+                CONNECTION = DriverManager.getConnection(DB_URL);
+                createDatabase();
+                insertDatabase();
+            } catch (final IOException e) {
+                LOGGER.log(Level.SEVERE, "Failed to read/create file:\n" + e.getMessage());
+                throw new ExceptionInInitializerError(e);
+            } catch (final SQLException e) {
+                LOGGER.log(Level.SEVERE, "Failed to run SQL script:\n" + e.getMessage());
+                throw new ExceptionInInitializerError(e);
+            }
+        }
+        else {
+            try {
+                CONNECTION = DriverManager.getConnection(DB_URL);
+            } catch (final SQLException e) {
+                LOGGER.log(Level.SEVERE, "Failed to establish connection:\n" + e.getMessage());
+                throw new ExceptionInInitializerError(e);
+            }
+        }
+    }
+
+    private DatabaseProvider() {
+        super();
+    };
+
+    public static void main(String... args) {
+
+    }
+
+    /**
+     * Gets the running database connection.
+     * @return the connection to the database
+     * @throws SQLException if the connection failed
+     */
+    public static Connection getConnection() throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL + "?busy_timeout=5000");
+        try (Statement s = conn.createStatement()) {
+            s.execute("PRAGMA journal_mode=WAL");
+            s.execute("PRAGMA synchronous=NORMAL");
+            s.execute("PRAGMA busy_timeout=5000");
+        }
+        return conn;
+    }
+
+    /**
+     * Constructs the database, if it does not exist yet.
+     * @throws IOException if it failed to read the init script
+     * @throws SQLException if it failed to parse the init script
+     */
+    private static void createDatabase() throws IOException, SQLException {
+        final Connection c = getConnection();
+        LOGGER.info("Creating database...");
+        final String creationScript = Files.readString(INIT_SCRIPT.toPath());
+        for (String statement : creationScript.split(";")) {
+            try (Statement s = c.createStatement()) {
+                s.execute(statement);
+            } catch (SQLException e) {
+                LOGGER.warning("Failed to run statement:\n" + statement + "\nCause:\n" + e);
+            }
+        }
+        LOGGER.info("Database creation complete!");
+    }
+
+    /**
+     * Inserts all the SQLite database entries
+     * @throws IOException if it failed to read the scripts
+     * @throws SQLException if it failed to parse the insertion script(s)
+     */
+    private static void insertDatabase() throws SQLException, IOException {
+        final Connection c = getConnection();
+        LOGGER.info("Inserting data");
+        final Path[] insertionScriptPaths = {
+                getPath("InsertWeapons.sql"),
+                getPath("InsertFusionRifleSpecifics.sql"),
+                getPath("InsertPulseRifleSpecifics.sql"),
+                getPath("InsertWeaponAmmoTypes.sql"),
+                getPath("InsertAmmoTypes.sql"),
+                getPath("InsertWeaponInfo.sql"),
+                getPath("InsertWeaponStats.sql"),
+        };
+
+        for (final Path p : insertionScriptPaths) {
+            LOGGER.info("Running " + p);
+            final String script = Files.readString(p);
+            final Statement s = c.createStatement();
+            s.execute(script);
+        }
+
+        LOGGER.info("Finished insertion");
+    }
+
+    /**
+     * Translates the file name into a relative file path.
+     * @param fileName the file name
+     * @return the path to the file from the content source
+     */
+    private static Path getPath(String fileName) {
+        return Path.of(WORKING_PATH, fileName);
+    }
+}
